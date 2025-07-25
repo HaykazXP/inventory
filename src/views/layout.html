@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory App</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    .side { width: 200px; background: #eee; height: 100vh; float: left; }
+    .main { margin-left: 200px; padding: 20px; }
+    .nav-link { display: block; padding: 10px; color: #333; text-decoration: none; }
+    .nav-link:hover { background: #ddd; }
+  </style>
+</head>
+<body>
+  <div class="side">
+    <a class="nav-link" href="/welcome">Welcome</a>
+    <!-- Future tabs here -->
+    <a class="nav-link" href="/logout">Logout</a>
+  </div>
+  <div class="main">
+    {{{body}}}
+  </div>
+</body>
+</html>
