@@ -14,10 +14,25 @@ async function createUser() {
 
   const exists = await User.findOne({ username });
   if (!exists) {
-    await User.create({ username, password: hash });
-    console.log('User created');
+    await User.create({ 
+      username, 
+      password: hash,
+      settings: { language: 'ru' } // Set Russian as default language
+    });
+    console.log('User created with Russian as default language');
   } else {
-    console.log('User already exists');
+    // Update existing user to have settings if they don't exist
+    const user = await User.findOne({ username });
+    if (!user.settings) {
+      await User.findOneAndUpdate(
+        { username },
+        { settings: { language: 'ru' } },
+        { new: true }
+      );
+      console.log('Updated existing user with default settings');
+    } else {
+      console.log('User already exists with settings');
+    }
   }
   await mongoose.disconnect();
 }

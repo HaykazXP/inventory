@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Inventory App</title>
+  <title>{{t.auth.welcomeBack}} - Inventory App</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
   <style>
     * {
@@ -29,11 +29,44 @@
       padding: 40px;
       width: 100%;
       max-width: 400px;
+      position: relative;
+    }
+
+    .language-selector {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      padding: 6px 12px;
+      border: 1px solid #e1e5e9;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .lang-btn:hover {
+      background: #f8f9fa;
+      border-color: #667eea;
+    }
+
+    .lang-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
     }
 
     .login-header {
       text-align: center;
       margin-bottom: 30px;
+      margin-top: 20px;
     }
 
     .login-header h1 {
@@ -135,47 +168,54 @@
 </head>
 <body>
   <div class="login-container">
+    <div class="language-selector">
+      <a href="?lng=en" class="lang-btn" id="lang-en">🇺🇸 EN</a>
+      <a href="?lng=ru" class="lang-btn" id="lang-ru">🇷🇺 RU</a>
+      <a href="?lng=hy" class="lang-btn" id="lang-hy">🇦🇲 HY</a>
+      <a href="?lng=ka" class="lang-btn" id="lang-ka">🇬🇪 KA</a>
+    </div>
+
     <div class="login-header">
-      <h1>Welcome Back</h1>
-      <p>Sign in to your inventory account</p>
+      <h1>{{t.auth.welcomeBack}}</h1>
+      <p>{{t.auth.signInToAccount}}</p>
     </div>
     
     <div id="errorMessage" class="error-message">
-      Invalid username or password. Please try again.
+      {{t.auth.invalidCredentials}}
     </div>
     
     <form method="POST" action="/login">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">{{t.auth.username}}</label>
         <input 
           type="text" 
           id="username" 
           name="username" 
-          placeholder="Enter your username" 
+          placeholder="{{t.auth.enterUsername}}" 
           required
           autocomplete="username"
         >
       </div>
       
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">{{t.auth.password}}</label>
         <input 
           type="password" 
           id="password" 
           name="password" 
-          placeholder="Enter your password" 
+          placeholder="{{t.auth.enterPassword}}" 
           required
           autocomplete="current-password"
         >
       </div>
       
       <button type="submit" class="submit-btn">
-        Sign In
+        {{t.auth.signIn}}
       </button>
     </form>
 
     <div class="footer">
-      <p>Inventory Management System</p>
+      <p>{{t.footer.inventoryManagementSystem}}</p>
     </div>
   </div>
 
@@ -183,9 +223,16 @@
     // Check for error parameter in URL
     const urlParams = new URLSearchParams(window.location.search);
     const error = urlParams.get('error');
+    const lang = urlParams.get('lng') || 'ru'; // Changed default to 'ru'
     
     if (error === 'invalid') {
       document.getElementById('errorMessage').classList.add('show');
+    }
+    
+    // Set active language button
+    const activeBtn = document.getElementById(`lang-${lang}`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
     }
   </script>
 </body>

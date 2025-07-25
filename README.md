@@ -1,6 +1,6 @@
 # Inventory App
 
-A simple NestJS + MongoDB inventory app with authentication (single user), Dockerized for easy development.
+A simple NestJS + MongoDB inventory app with authentication (single user), Dockerized for easy development, featuring **multi-language support**.
 
 ## Features
 
@@ -9,6 +9,10 @@ A simple NestJS + MongoDB inventory app with authentication (single user), Docke
 - Simple login and welcome page
 - Side panel for navigation (future tabs)
 - One user (created via migration script)
+- **🌍 Multi-language support**: English, Russian, Armenian, Georgian
+- **⚙️ Settings page** with language selector
+- **🇷🇺 Russian as default language**
+- **💾 Database persistence** for language preferences
 
 ---
 
@@ -52,11 +56,55 @@ A simple NestJS + MongoDB inventory app with authentication (single user), Docke
 
    - Default username: `admin`
    - Default password: `admin123`
+   - Default language: `Russian`
    - (You can change these in `src/migration/create-user.ts` before running the migration.)
 
 5. **Access the app:**
 
    Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Multi-Language Support 🌍
+
+The application supports 4 languages with **Russian as the default**:
+
+- 🇷🇺 **Russian** (Русский) - **Default**
+- 🇺🇸 **English** (English)
+- 🇦🇲 **Armenian** (Հայերեն)
+- 🇬🇪 **Georgian** (ქართული)
+
+### How to Use
+
+1. **Language Selection**: Use the language selector in the top-right corner of the login page
+2. **Settings Page**: Access `/settings` to change language preferences (requires login)
+3. **URL Parameter**: Add `?lng=ru` (or `en`, `hy`, `ka`) to the URL to switch languages
+4. **API Endpoints**:
+   - `GET /api/languages` - Get available languages
+   - `GET /api/translations?lng=ru` - Get translations for a specific language
+
+### Example URLs
+
+- Russian (default): `http://localhost:3000` or `http://localhost:3000?lng=ru`
+- English: `http://localhost:3000?lng=en`
+- Armenian: `http://localhost:3000?lng=hy`
+- Georgian: `http://localhost:3000?lng=ka`
+
+### Settings Page
+
+The settings page (`/settings`) provides:
+- **Language Selection**: Visual language picker with flags
+- **Real-time Updates**: Language changes are applied immediately
+- **Database Persistence**: Language preference is stored in MongoDB and persists across sessions
+- **User-specific Settings**: Each user can have their own language preference
+
+### Database Persistence 💾
+
+Language preferences are stored in the user's database record:
+- **User Schema**: Each user has a `settings` field with `language` preference
+- **Automatic Loading**: User's preferred language is loaded on each page visit
+- **Fallback System**: Falls back to Russian if no preference is set
+- **Migration Support**: Existing users are automatically updated with default settings
 
 ---
 
@@ -86,9 +134,18 @@ docker compose down
 inventory/
 ├── src/
 │   ├── auth/           # Authentication module
-│   ├── user/           # User management
+│   ├── user/           # User management with settings
+│   ├── i18n/           # Internationalization
 │   ├── migration/      # Database migrations
+│   ├── translations/   # Language files
+│   │   ├── en.json     # English
+│   │   ├── ru.json     # Russian (default)
+│   │   ├── hy.json     # Armenian
+│   │   └── ka.json     # Georgian
 │   ├── views/          # HTML templates
+│   │   ├── login.html  # Login page
+│   │   ├── welcome.html # Dashboard
+│   │   └── settings.html # Settings page
 │   ├── app.module.ts   # Main module
 │   └── main.ts         # Application entry point
 ├── Dockerfile          # Node.js container

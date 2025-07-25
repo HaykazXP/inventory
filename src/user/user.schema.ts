@@ -7,7 +7,12 @@ export class User extends Document {
   username: string;
 
   @Prop({ required: true })
-  password: string; // hashed
+  password: string;
+
+  @Prop({ type: Object, default: { language: 'ru' } })
+  settings: {
+    language: string;
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

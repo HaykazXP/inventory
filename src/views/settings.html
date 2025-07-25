@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{t.settings.title}} - {{t.navigation.inventoryApp}}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e1e5e9;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid #e1e5e9;
+    }
+
+    .sidebar-header h2 {
+      color: #333;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .sidebar-header p {
+      color: #666;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .nav-menu {
+      padding: 20px 0;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 12px 20px;
+      color: #555;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: #f8f9fa;
+      color: #667eea;
+      border-left-color: #667eea;
+    }
+
+    .nav-item.active {
+      background: #f0f2ff;
+      color: #667eea;
+      border-left-color: #667eea;
+    }
+
+    .nav-item.logout {
+      margin-top: 20px;
+      border-top: 1px solid #e1e5e9;
+      padding-top: 20px;
+      color: #dc3545;
+    }
+
+    .nav-item.logout:hover {
+      background: #fff5f5;
+      color: #dc3545;
+      border-left-color: #dc3545;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 40px;
+    }
+
+    .settings-header {
+      margin-bottom: 30px;
+    }
+
+    .settings-header h1 {
+      color: #333;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .settings-header p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .settings-section {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    .settings-section h2 {
+      color: #333;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .settings-section p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .language-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .language-option {
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .language-option:hover {
+      border-color: #667eea;
+      background: #f8f9fa;
+    }
+
+    .language-option.selected {
+      border-color: #667eea;
+      background: #f0f2ff;
+    }
+
+    .language-flag {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .language-name {
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .language-native {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .save-button {
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .save-button:hover {
+      background: #5a6fd8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .save-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .success-message {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+      
+      .app-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>{{t.navigation.inventoryApp}}</h2>
+        <p>{{t.navigation.managementDashboard}}</p>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="/welcome" class="nav-item">
+          {{t.navigation.dashboard}}
+        </a>
+        <a href="#" class="nav-item">
+          {{t.navigation.products}}
+        </a>
+        <a href="#" class="nav-item">
+          {{t.navigation.categories}}
+        </a>
+        <a href="#" class="nav-item">
+          {{t.navigation.reports}}
+        </a>
+        <a href="/settings" class="nav-item active">
+          {{t.navigation.settings}}
+        </a>
+        <a href="/logout" class="nav-item logout">
+          {{t.navigation.logout}}
+        </a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="settings-header">
+        <h1>{{t.settings.title}}</h1>
+        <p>{{t.settings.subtitle}}</p>
+      </div>
+
+      <div class="settings-section">
+        <h2>{{t.settings.languageSettings}}</h2>
+        <p>{{t.settings.languageDescription}}</p>
+        
+        <form method="POST" action="/settings/language" id="languageForm">
+          <div class="language-grid">
+            {{#each languages}}
+            <div class="language-option" data-language="{{this.code}}">
+              <div class="language-flag">{{this.flag}}</div>
+              <div class="language-name">{{this.name}}</div>
+              <div class="language-native">{{this.name}}</div>
+              <input type="radio" name="language" value="{{this.code}}" style="display: none;">
+            </div>
+            {{/each}}
+          </div>
+          
+          <button type="submit" class="save-button" id="saveButton" disabled>
+            {{t.settings.saveChanges}}
+          </button>
+        </form>
+        
+        <div class="success-message" id="successMessage">
+          {{t.settings.languageChanged}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set current language as selected
+    const currentLang = '{{lang}}';
+    const languageOptions = document.querySelectorAll('.language-option');
+    const saveButton = document.getElementById('saveButton');
+    const successMessage = document.getElementById('successMessage');
+    
+    languageOptions.forEach(option => {
+      const radio = option.querySelector('input[type="radio"]');
+      const languageCode = option.dataset.language;
+      
+      if (languageCode === currentLang) {
+        option.classList.add('selected');
+        radio.checked = true;
+      }
+      
+      option.addEventListener('click', () => {
+        // Remove selected class from all options
+        languageOptions.forEach(opt => opt.classList.remove('selected'));
+        
+        // Add selected class to clicked option
+        option.classList.add('selected');
+        radio.checked = true;
+        
+        // Enable save button
+        saveButton.disabled = false;
+      });
+    });
+    
+    // Handle form submission
+    document.getElementById('languageForm').addEventListener('submit', (e) => {
+      const selectedLanguage = document.querySelector('input[name="language"]:checked');
+      if (selectedLanguage) {
+        // Show success message
+        successMessage.classList.add('show');
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          successMessage.classList.remove('show');
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html> 

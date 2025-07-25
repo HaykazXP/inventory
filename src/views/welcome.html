@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome - Inventory App</title>
+  <title>{{t.navigation.inventoryApp}} - {{t.navigation.managementDashboard}}</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
   <style>
     * {
@@ -223,28 +223,28 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <div class="sidebar-header">
-        <h2>Inventory App</h2>
-        <p>Management Dashboard</p>
+        <h2>{{t.navigation.inventoryApp}}</h2>
+        <p>{{t.navigation.managementDashboard}}</p>
       </div>
       
       <nav class="nav-menu">
         <a href="/welcome" class="nav-item active">
-          📊 Dashboard
+          {{t.navigation.dashboard}}
         </a>
         <a href="#" class="nav-item">
-          📦 Products
+          {{t.navigation.products}}
         </a>
         <a href="#" class="nav-item">
-          📋 Categories
+          {{t.navigation.categories}}
         </a>
         <a href="#" class="nav-item">
-          📈 Reports
+          {{t.navigation.reports}}
         </a>
-        <a href="#" class="nav-item">
-          ⚙️ Settings
+        <a href="/settings" class="nav-item">
+          {{t.navigation.settings}}
         </a>
         <a href="/logout" class="nav-item logout">
-          🚪 Logout
+          {{t.navigation.logout}}
         </a>
       </nav>
     </div>
@@ -253,37 +253,37 @@
     <div class="main-content">
       <div class="welcome-section">
         <div class="welcome-header">
-          <h1>Welcome back! 👋</h1>
-          <p>Here's what's happening with your inventory today.</p>
+          <h1>{{t.dashboard.welcomeBack}}</h1>
+          <p>{{t.dashboard.dashboardSubtitle}}</p>
         </div>
 
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-number">1,234</div>
-            <div class="stat-label">Total Products</div>
+            <div class="stat-label">{{t.dashboard.totalProducts}}</div>
           </div>
           <div class="stat-card">
             <div class="stat-number">56</div>
-            <div class="stat-label">Low Stock Items</div>
+            <div class="stat-label">{{t.dashboard.lowStockItems}}</div>
           </div>
           <div class="stat-card">
             <div class="stat-number">89</div>
-            <div class="stat-label">Categories</div>
+            <div class="stat-label">{{t.dashboard.categories}}</div>
           </div>
           <div class="stat-card">
             <div class="stat-number">$12,345</div>
-            <div class="stat-label">Total Value</div>
+            <div class="stat-label">{{t.dashboard.totalValue}}</div>
           </div>
         </div>
       </div>
 
       <div class="quick-actions">
-        <h3>Quick Actions</h3>
+        <h3>{{t.dashboard.quickActions}}</h3>
         <div class="action-buttons">
-          <a href="#" class="action-btn">➕ Add Product</a>
-          <a href="#" class="action-btn">📊 View Reports</a>
-          <a href="#" class="action-btn secondary">📋 Manage Categories</a>
-          <a href="#" class="action-btn secondary">⚙️ Settings</a>
+          <a href="#" class="action-btn">{{t.dashboard.addProduct}}</a>
+          <a href="#" class="action-btn">{{t.dashboard.viewReports}}</a>
+          <a href="#" class="action-btn secondary">{{t.dashboard.manageCategories}}</a>
+          <a href="/settings" class="action-btn secondary">{{t.dashboard.settings}}</a>
         </div>
       </div>
     </div>
