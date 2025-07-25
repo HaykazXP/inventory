@@ -1,0 +1,133 @@
+<!-- Settings Page Content -->
+<div class="settings-section card">
+  <div class="settings-header">
+    <h1>{{t.settings.title}}</h1>
+    <p>{{t.settings.subtitle}}</p>
+  </div>
+
+  <div class="settings-content">
+    <div class="setting-group">
+      <h3>{{t.settings.language.title}}</h3>
+      <p>{{t.settings.language.description}}</p>
+      
+      <div class="language-grid">
+        {{#each languages}}
+        <div class="language-option {{#if (eq ../currentLanguage this.code)}}active{{/if}}" 
+             onclick="changeLanguage('{{this.code}}')">
+          <div class="language-flag">{{this.flag}}</div>
+          <div class="language-info">
+            <div class="language-name">{{this.name}}</div>
+            <div class="language-native">{{this.native}}</div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .settings-section {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .settings-header {
+    margin-bottom: 40px;
+  }
+
+  .settings-header h1 {
+    color: #333;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .settings-header p {
+    color: #666;
+    font-size: 16px;
+  }
+
+  .setting-group {
+    margin-bottom: 40px;
+  }
+
+  .setting-group h3 {
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .setting-group p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .language-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .language-option:hover {
+    border-color: #667eea;
+    background: #f8f9fa;
+  }
+
+  .language-option.active {
+    border-color: #667eea;
+    background: #f0f2ff;
+  }
+
+  .language-flag {
+    font-size: 24px;
+    margin-right: 15px;
+  }
+
+  .language-info {
+    flex: 1;
+  }
+
+  .language-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .language-native {
+    color: #666;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+</style>
+
+<script>
+function changeLanguage(languageCode) {
+  fetch('/settings/language', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `language=${languageCode}`
+  }).then(() => {
+    window.location.href = `/settings?lng=${languageCode}`;
+  }).catch(error => {
+    console.error('Error changing language:', error);
+    alert('Failed to change language');
+  });
+}
+</script> 

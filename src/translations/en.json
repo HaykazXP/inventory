@@ -43,19 +43,19 @@
     "totalValue": "Total Value",
     "quickActions": "Quick Actions",
     "addProduct": "➕ Add Product",
-    "viewReports": "📊 View Reports",
-    "manageCategories": "📋 Manage Categories",
-    "settings": "⚙️ Settings"
+    "viewReports": "View Reports",
+    "manageCategories": "Manage Categories",
+    "settings": "Settings"
   },
   "navigation": {
     "inventoryApp": "Inventory App",
     "managementDashboard": "Management Dashboard",
-    "dashboard": "📊 Dashboard",
-    "products": "📦 Products",
-    "categories": "📋 Categories",
-    "reports": "📈 Reports",
-    "settings": "⚙️ Settings",
-    "logout": "🚪 Logout"
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "categories": "Categories",
+    "reports": "Reports",
+    "settings": "Settings",
+    "logout": "Logout"
   },
   "settings": {
     "title": "Settings",

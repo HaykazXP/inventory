@@ -64,16 +64,45 @@ export class AuthController {
     
     this.i18nService.setLanguage(lang);
     
-    // Load template and render with translations
-    const templatePath = path.join(process.cwd(), 'src', 'views', 'welcome.html');
-    const templateContent = fs.readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(templateContent);
+    // Register Handlebars helpers
+    Handlebars.registerHelper('eq', function(a, b) {
+      return a === b;
+    });
+    
+    // Register partials
+    const sidebarPartialPath = path.join(process.cwd(), 'src', 'views', 'components', 'sidebar.html');
+    const sidebarPartialContent = fs.readFileSync(sidebarPartialPath, 'utf8');
+    Handlebars.registerPartial('components/sidebar', sidebarPartialContent);
+    
+    const stylesPartialPath = path.join(process.cwd(), 'src', 'views', 'components', 'styles.html');
+    const stylesPartialContent = fs.readFileSync(stylesPartialPath, 'utf8');
+    Handlebars.registerPartial('components/styles', stylesPartialContent);
+    
+    // Load welcome content template
+    const welcomeTemplatePath = path.join(process.cwd(), 'src', 'views', 'pages', 'welcome.html');
+    const welcomeTemplateContent = fs.readFileSync(welcomeTemplatePath, 'utf8');
+    const welcomeTemplate = Handlebars.compile(welcomeTemplateContent);
+    
+    // Load base layout template
+    const layoutTemplatePath = path.join(process.cwd(), 'src', 'views', 'layouts', 'base.html');
+    const layoutTemplateContent = fs.readFileSync(layoutTemplatePath, 'utf8');
+    const layoutTemplate = Handlebars.compile(layoutTemplateContent);
     
     const translations = this.i18nService.getAllTranslations(lang);
     
-    const html = template({
+    // Render welcome content
+    const welcomeContent = welcomeTemplate({
       lang,
       t: translations
+    });
+    
+    // Render full page with layout
+    const html = layoutTemplate({
+      lang,
+      t: translations,
+      pageTitle: 'Dashboard',
+      currentPage: 'welcome',
+      body: welcomeContent
     });
     
     res.send(html);
@@ -94,18 +123,48 @@ export class AuthController {
     
     this.i18nService.setLanguage(lang);
     
-    // Load template and render with translations
-    const templatePath = path.join(process.cwd(), 'src', 'views', 'settings.html');
-    const templateContent = fs.readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(templateContent);
+    // Register Handlebars helpers
+    Handlebars.registerHelper('eq', function(a, b) {
+      return a === b;
+    });
+    
+    // Register partials
+    const sidebarPartialPath = path.join(process.cwd(), 'src', 'views', 'components', 'sidebar.html');
+    const sidebarPartialContent = fs.readFileSync(sidebarPartialPath, 'utf8');
+    Handlebars.registerPartial('components/sidebar', sidebarPartialContent);
+    
+    const stylesPartialPath = path.join(process.cwd(), 'src', 'views', 'components', 'styles.html');
+    const stylesPartialContent = fs.readFileSync(stylesPartialPath, 'utf8');
+    Handlebars.registerPartial('components/styles', stylesPartialContent);
+    
+    // Load settings content template
+    const settingsTemplatePath = path.join(process.cwd(), 'src', 'views', 'pages', 'settings.html');
+    const settingsTemplateContent = fs.readFileSync(settingsTemplatePath, 'utf8');
+    const settingsTemplate = Handlebars.compile(settingsTemplateContent);
+    
+    // Load base layout template
+    const layoutTemplatePath = path.join(process.cwd(), 'src', 'views', 'layouts', 'base.html');
+    const layoutTemplateContent = fs.readFileSync(layoutTemplatePath, 'utf8');
+    const layoutTemplate = Handlebars.compile(layoutTemplateContent);
     
     const translations = this.i18nService.getAllTranslations(lang);
     const availableLanguages = this.i18nService.getAvailableLanguages();
     
-    const html = template({
+    // Render settings content
+    const settingsContent = settingsTemplate({
       lang,
       t: translations,
-      languages: availableLanguages
+      languages: availableLanguages,
+      currentLanguage: lang
+    });
+    
+    // Render full page with layout
+    const html = layoutTemplate({
+      lang,
+      t: translations,
+      pageTitle: 'Settings',
+      currentPage: 'settings',
+      body: settingsContent
     });
     
     res.send(html);
