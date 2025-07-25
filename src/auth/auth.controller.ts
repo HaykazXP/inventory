@@ -19,7 +19,8 @@ export class AuthController {
       req.session.user = user.username;
       return res.redirect('/welcome');
     }
-    res.sendFile('login.html', { root: 'src/views' });
+    // Redirect back to login with error parameter
+    res.redirect('/?error=invalid');
   }
 
   @Get('/welcome')
