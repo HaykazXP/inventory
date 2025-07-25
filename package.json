@@ -1,0 +1,28 @@
+{
+  "name": "inventory-ms",
+  "version": "0.0.1",
+  "description": "A comprehensive web-based inventory management application designed to help businesses monitor and manage their inventory efficiently.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/HaykazXP/inventory.git"
+  },
+  "keywords": [
+    "inventory",
+    "management",
+    "system",
+    "product",
+    "sale",
+    "sellingpoint",
+    "park"
+  ],
+  "author": "Haykaz Petrosyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HaykazXP/inventory/issues"
+  },
+  "homepage": "https://github.com/HaykazXP/inventory#readme"
+}
