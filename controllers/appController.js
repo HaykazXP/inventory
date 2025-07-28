@@ -13,7 +13,14 @@ const getRoot = (req, res) => {
     version: '1.0.0',
     endpoints: {
       health: '/',
-      login: 'POST /login'
+      login: 'POST /login',
+      products: {
+        getAll: 'GET /products',
+        getOne: 'GET /products/:id',
+        create: 'POST /products',
+        update: 'PUT /products/:id',
+        delete: 'DELETE /products/:id'
+      }
     }
   });
 };
