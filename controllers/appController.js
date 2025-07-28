@@ -20,6 +20,13 @@ const getRoot = (req, res) => {
         create: 'POST /products',
         update: 'PUT /products/:id',
         delete: 'DELETE /products/:id'
+      },
+      sellingPoints: {
+        getAll: 'GET /selling-points',
+        getOne: 'GET /selling-points/:id',
+        create: 'POST /selling-points',
+        update: 'PUT /selling-points/:id',
+        delete: 'DELETE /selling-points/:id'
       }
     }
   });
