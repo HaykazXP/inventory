@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,64 +8,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
-
-// Login endpoint
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // Check if username and password are provided
-  if (!username || !password) {
-    return res.status(400).json({
-      error: 'Missing credentials',
-      message: 'Username and password are required'
-    });
-  }
-
-  // Check credentials against environment variables
-  const validUsername = process.env.USERNAME || 'admin';
-  const validPassword = process.env.PASSWORD || 'password123';
-
-  if (username !== validUsername || password !== validPassword) {
-    return res.status(401).json({
-      error: 'Invalid credentials',
-      message: 'Username or password is incorrect'
-    });
-  }
-
-  // Generate JWT token with 1 day expiration
-  const token = jwt.sign(
-    { username: username },
-    process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
-    { expiresIn: '1d' }
-  );
-
-  res.status(200).json({
-    message: 'Login successful',
-    token: token,
-    expiresIn: '1d'
-  });
-});
-
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the Inventory API',
-    version: '1.0.0',
-    endpoints: {
-      health: '/health',
-      login: 'POST /login'
-    }
-  });
-});
+// Routes
+const routes = require('.');
+app.use('/', routes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -87,9 +31,7 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📍 Health check available at: http://localhost:${PORT}/health`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app; 
