@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { getStockReplenishments } from '../services/api';
 import Card from '../components/Card';
+import Pagination from '../components/Pagination';
 import './Page.css';
 
 const StockReplenishmentHistoryPage = () => {
     const [stockReplenishments, setStockReplenishments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     useEffect(() => {
         fetchStockReplenishments();
@@ -34,6 +37,17 @@ const StockReplenishmentHistoryPage = () => {
             hour: '2-digit',
             minute: '2-digit'
         });
+    };
+
+    const getPaginatedData = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return stockReplenishments.slice(startIndex, endIndex);
+    };
+
+    const handleItemsPerPageChange = (newItemsPerPage) => {
+        setItemsPerPage(newItemsPerPage);
+        setCurrentPage(1); // Reset to first page when changing items per page
     };
 
     if (loading) {
@@ -71,40 +85,50 @@ const StockReplenishmentHistoryPage = () => {
                 </div>
                 
                 {stockReplenishments.length > 0 ? (
-                    <div className="stock-replenishments-table-container">
-                        <table className="stock-replenishments-table">
-                            <thead>
-                                <tr>
-                                    <th>Дата</th>
-                                    <th>Точка продаж</th>
-                                    <th>Товар</th>
-                                    <th>Количество</th>
-                                    <th>Примечания</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {stockReplenishments.map((replenishment) => (
-                                    <tr key={replenishment._id}>
-                                        <td className="date-cell">
-                                            {formatDate(replenishment.date)}
-                                        </td>
-                                        <td className="selling-point-cell">
-                                            {replenishment.sellingPointId?.name || 'Неизвестная точка'}
-                                        </td>
-                                        <td className="product-name-cell">
-                                            {replenishment.productId?.name || 'Неизвестный товар'}
-                                        </td>
-                                        <td className="quantity-cell">
-                                            {replenishment.quantity}
-                                        </td>
-                                        <td className="notes-cell">
-                                            {replenishment.notes || '-'}
-                                        </td>
+                    <>
+                        <div className="stock-replenishments-table-container">
+                            <table className="stock-replenishments-table">
+                                <thead>
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Точка продаж</th>
+                                        <th>Товар</th>
+                                        <th>Количество</th>
+                                        <th>Примечания</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {getPaginatedData().map((replenishment) => (
+                                        <tr key={replenishment._id}>
+                                            <td className="date-cell">
+                                                {formatDate(replenishment.date)}
+                                            </td>
+                                            <td className="selling-point-cell">
+                                                {replenishment.sellingPointId?.name || 'Неизвестная точка'}
+                                            </td>
+                                            <td className="product-name-cell">
+                                                {replenishment.productId?.name || 'Неизвестный товар'}
+                                            </td>
+                                            <td className="quantity-cell">
+                                                {replenishment.quantity}
+                                            </td>
+                                            <td className="notes-cell">
+                                                {replenishment.notes || '-'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <Pagination
+                            currentPage={currentPage}
+                            totalItems={stockReplenishments.length}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={setCurrentPage}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                        />
+                    </>
                 ) : (
                     <div className="empty-replenishments">
                         <p>История закупок пуста</p>

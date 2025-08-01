@@ -4,6 +4,7 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import AddProductModal from '../components/AddProductModal';
 import AddStockReplenishmentModal from '../components/AddStockReplenishmentModal';
+import Pagination from '../components/Pagination';
 import './Page.css';
 
 const SellingPointsPage = () => {
@@ -14,6 +15,10 @@ const SellingPointsPage = () => {
     const [isStockReplenishmentModalOpen, setIsStockReplenishmentModalOpen] = useState(false);
     const [stockReplenishments, setStockReplenishments] = useState([]);
     const [inventoryLogs, setInventoryLogs] = useState([]);
+    const [stockReplenishmentPage, setStockReplenishmentPage] = useState(1);
+    const [stockReplenishmentItemsPerPage, setStockReplenishmentItemsPerPage] = useState(10);
+    const [inventoryLogsPage, setInventoryLogsPage] = useState(1);
+    const [inventoryLogsItemsPerPage, setInventoryLogsItemsPerPage] = useState(10);
 
     const subTabs = [
         { id: 0, name: 'Товары' },
@@ -72,6 +77,48 @@ const SellingPointsPage = () => {
 
     const formatCurrency = (amount) => {
         return `${amount.toLocaleString('ru-RU')} руб.`;
+    };
+
+    // Stock replenishment pagination helpers
+    const getFilteredStockReplenishments = () => {
+        return stockReplenishments.filter(rep => rep.sellingPointId && rep.sellingPointId._id === activeSellingPoint._id);
+    };
+
+    const getPaginatedStockReplenishments = () => {
+        const filteredData = getFilteredStockReplenishments();
+        const startIndex = (stockReplenishmentPage - 1) * stockReplenishmentItemsPerPage;
+        const endIndex = startIndex + stockReplenishmentItemsPerPage;
+        return filteredData.slice(startIndex, endIndex);
+    };
+
+    const handleStockReplenishmentPageChange = (newPage) => {
+        setStockReplenishmentPage(newPage);
+    };
+
+    const handleStockReplenishmentItemsPerPageChange = (newItemsPerPage) => {
+        setStockReplenishmentItemsPerPage(newItemsPerPage);
+        setStockReplenishmentPage(1);
+    };
+
+    // Inventory logs pagination helpers
+    const getFilteredInventoryLogs = () => {
+        return inventoryLogs.filter(log => log.sellingPointId && log.sellingPointId._id === activeSellingPoint._id);
+    };
+
+    const getPaginatedInventoryLogs = () => {
+        const filteredData = getFilteredInventoryLogs();
+        const startIndex = (inventoryLogsPage - 1) * inventoryLogsItemsPerPage;
+        const endIndex = startIndex + inventoryLogsItemsPerPage;
+        return filteredData.slice(startIndex, endIndex);
+    };
+
+    const handleInventoryLogsPageChange = (newPage) => {
+        setInventoryLogsPage(newPage);
+    };
+
+    const handleInventoryLogsItemsPerPageChange = (newItemsPerPage) => {
+        setInventoryLogsItemsPerPage(newItemsPerPage);
+        setInventoryLogsPage(1);
     };
 
     if (sellingPoints.length === 0) {
@@ -202,45 +249,53 @@ const SellingPointsPage = () => {
                                             Добавить закупку
                                         </Button>
                                     </div>
-                                    {stockReplenishments.filter(rep => rep.sellingPointId && rep.sellingPointId._id === activeSellingPoint._id).length > 0 ? (
-                                        <div className="stock-replenishments-table-container">
-                                            <table className="stock-replenishments-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Дата</th>
-                                                        <th>Товар</th>
-                                                        <th>Количество</th>
-                                                        <th>Примечания</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {stockReplenishments
-                                                        .filter(rep => rep.sellingPointId && rep.sellingPointId._id === activeSellingPoint._id)
-                                                        .map((replenishment) => (
-                                                        <tr key={replenishment._id}>
-                                                            <td className="date-cell">
-                                                                {new Date(replenishment.date).toLocaleDateString('ru-RU', {
-                                                                    day: '2-digit',
-                                                                    month: '2-digit',
-                                                                    year: 'numeric',
-                                                                    hour: '2-digit',
-                                                                    minute: '2-digit'
-                                                                })}
-                                                            </td>
-                                                            <td className="product-name-cell">
-                                                                {replenishment.productId?.name || 'Неизвестный товар'}
-                                                            </td>
-                                                            <td className="quantity-cell">
-                                                                {replenishment.quantity}
-                                                            </td>
-                                                            <td className="notes-cell">
-                                                                {replenishment.notes || '-'}
-                                                            </td>
+                                    {getFilteredStockReplenishments().length > 0 ? (
+                                        <>
+                                            <div className="stock-replenishments-table-container">
+                                                <table className="stock-replenishments-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Дата</th>
+                                                            <th>Товар</th>
+                                                            <th>Количество</th>
+                                                            <th>Примечания</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    </thead>
+                                                    <tbody>
+                                                        {getPaginatedStockReplenishments().map((replenishment) => (
+                                                            <tr key={replenishment._id}>
+                                                                <td className="date-cell">
+                                                                    {new Date(replenishment.date).toLocaleDateString('ru-RU', {
+                                                                        day: '2-digit',
+                                                                        month: '2-digit',
+                                                                        year: 'numeric',
+                                                                        hour: '2-digit',
+                                                                        minute: '2-digit'
+                                                                    })}
+                                                                </td>
+                                                                <td className="product-name-cell">
+                                                                    {replenishment.productId?.name || 'Неизвестный товар'}
+                                                                </td>
+                                                                <td className="quantity-cell">
+                                                                    {replenishment.quantity}
+                                                                </td>
+                                                                <td className="notes-cell">
+                                                                    {replenishment.notes || '-'}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
+                                            <Pagination
+                                                currentPage={stockReplenishmentPage}
+                                                totalItems={getFilteredStockReplenishments().length}
+                                                itemsPerPage={stockReplenishmentItemsPerPage}
+                                                onPageChange={handleStockReplenishmentPageChange}
+                                                onItemsPerPageChange={handleStockReplenishmentItemsPerPageChange}
+                                            />
+                                        </>
                                     ) : (
                                         <div className="empty-replenishments">
                                             <p>История закупок для данной точки пуста</p>
@@ -267,60 +322,68 @@ const SellingPointsPage = () => {
 
                     {/* Inventory History Table */}
                     <Card title="История изменений товаров">
-                        {inventoryLogs.filter(log => log.sellingPointId && log.sellingPointId._id === activeSellingPoint._id).length > 0 ? (
-                            <div className="inventory-logs-table-container">
-                                <table className="inventory-logs-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Дата</th>
-                                            <th>Товар</th>
-                                            <th>Тип изменения</th>
-                                            <th>Было</th>
-                                            <th>Стало</th>
-                                            <th>Изменение</th>
-                                            <th>Примечания</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {inventoryLogs
-                                            .filter(log => log.sellingPointId && log.sellingPointId._id === activeSellingPoint._id)
-                                            .map((log) => (
-                                            <tr key={log._id}>
-                                                <td className="date-cell">
-                                                    {new Date(log.date).toLocaleDateString('ru-RU', {
-                                                        day: '2-digit',
-                                                        month: '2-digit',
-                                                        year: 'numeric',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
-                                                </td>
-                                                <td className="product-name-cell">
-                                                    {log.productId?.name || 'Неизвестный товар'}
-                                                </td>
-                                                <td className="change-type-cell">
-                                                    <span className={`change-type ${log.changeType}`}>
-                                                        {log.changeType === 'addition' ? 'Пополнение' : 
-                                                         log.changeType === 'subtraction' ? 'Списание' : 'Корректировка'}
-                                                    </span>
-                                                </td>
-                                                <td className="quantity-cell">
-                                                    {log.oldValue}
-                                                </td>
-                                                <td className="quantity-cell">
-                                                    {log.newValue}
-                                                </td>
-                                                <td className={`quantity-cell ${log.countChange > 0 ? 'positive' : 'negative'}`}>
-                                                    {log.countChange > 0 ? '+' : ''}{log.countChange}
-                                                </td>
-                                                <td className="notes-cell">
-                                                    {log.notes || '-'}
-                                                </td>
+                        {getFilteredInventoryLogs().length > 0 ? (
+                            <>
+                                <div className="inventory-logs-table-container">
+                                    <table className="inventory-logs-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Дата</th>
+                                                <th>Товар</th>
+                                                <th>Тип изменения</th>
+                                                <th>Было</th>
+                                                <th>Стало</th>
+                                                <th>Изменение</th>
+                                                <th>Примечания</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            {getPaginatedInventoryLogs().map((log) => (
+                                                <tr key={log._id}>
+                                                    <td className="date-cell">
+                                                        {new Date(log.date).toLocaleDateString('ru-RU', {
+                                                            day: '2-digit',
+                                                            month: '2-digit',
+                                                            year: 'numeric',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit'
+                                                        })}
+                                                    </td>
+                                                    <td className="product-name-cell">
+                                                        {log.productId?.name || 'Неизвестный товар'}
+                                                    </td>
+                                                    <td className="change-type-cell">
+                                                        <span className={`change-type ${log.changeType}`}>
+                                                            {log.changeType === 'addition' ? 'Пополнение' : 
+                                                             log.changeType === 'subtraction' ? 'Списание' : 'Корректировка'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="quantity-cell">
+                                                        {log.oldValue}
+                                                    </td>
+                                                    <td className="quantity-cell">
+                                                        {log.newValue}
+                                                    </td>
+                                                    <td className={`quantity-cell ${log.countChange > 0 ? 'positive' : 'negative'}`}>
+                                                        {log.countChange > 0 ? '+' : ''}{log.countChange}
+                                                    </td>
+                                                    <td className="notes-cell">
+                                                        {log.notes || '-'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <Pagination
+                                    currentPage={inventoryLogsPage}
+                                    totalItems={getFilteredInventoryLogs().length}
+                                    itemsPerPage={inventoryLogsItemsPerPage}
+                                    onPageChange={handleInventoryLogsPageChange}
+                                    onItemsPerPageChange={handleInventoryLogsItemsPerPageChange}
+                                />
+                            </>
                         ) : (
                             <div className="empty-logs">
                                 <p>История изменений для данной точки пуста</p>

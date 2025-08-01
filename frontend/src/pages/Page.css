@@ -33,6 +33,7 @@
 /* Tabs Styles */
 .tabs {
     margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .tabs-header {
@@ -74,6 +75,7 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
     margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .summary-value {
@@ -130,6 +132,35 @@
     }
 }
 
+/* Additional responsive styles for full-width layout */
+@media (max-width: 1200px) {
+    .summary-cards {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .card-header-with-action {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .tabs-list {
+        flex-wrap: wrap;
+    }
+    
+    .sub-tabs-header {
+        flex-wrap: wrap;
+    }
+    
+    .products-table-container,
+    .stock-replenishments-table-container,
+    .inventory-logs-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
 /* Card Header with Action */
 .card-header-with-action {
     display: flex;
@@ -138,6 +169,9 @@
     margin-bottom: 1rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid #e9ecef;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .card-title {
@@ -196,6 +230,7 @@
 .products-table-container {
     overflow-x: auto;
     margin-top: 1rem;
+    width: 100%;
 }
 
 .products-table {
@@ -270,6 +305,7 @@
 .stock-replenishments-table-container {
     overflow-x: auto;
     margin-top: 1rem;
+    width: 100%;
 }
 
 .stock-replenishments-table {
@@ -313,7 +349,7 @@
 
 .notes-cell {
     color: #6c757d;
-    text-align: left;
+    text-align: center;
     width: 30%;
     font-style: italic;
 }
@@ -338,6 +374,7 @@
 .inventory-logs-table-container {
     overflow-x: auto;
     margin-top: 1rem;
+    width: 100%;
 }
 
 .inventory-logs-table {
