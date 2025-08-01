@@ -1,0 +1,115 @@
+.confirmation-modal {
+    padding: 0;
+}
+
+.confirmation-message {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #495057;
+    text-align: center;
+}
+
+.confirmation-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.confirmation-btn {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.confirmation-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.confirmation-btn-cancel {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 2px solid #dee2e6;
+}
+
+.confirmation-btn-cancel:hover:not(:disabled) {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    color: #495057;
+}
+
+.confirmation-btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: 2px solid #dc3545;
+}
+
+.confirmation-btn-danger:hover:not(:disabled) {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Loading state styling */
+.confirmation-btn:disabled {
+    position: relative;
+}
+
+.confirmation-btn:disabled::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 480px) {
+    .confirmation-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .confirmation-btn {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .confirmation-message {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}

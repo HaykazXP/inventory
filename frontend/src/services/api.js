@@ -71,6 +71,9 @@ export const refreshToken = (refreshToken) => axios.post('/api/auth/refresh', { 
 
 // Product endpoints
 export const getProducts = () => apiClient.get('/products');
+export const createProduct = (data) => apiClient.post('/products', data);
+export const updateProduct = (id, data) => apiClient.put(`/products/${id}`, data);
+export const deleteProduct = (id) => apiClient.delete(`/products/${id}`);
 
 // Selling Point endpoints
 export const getSellingPoints = () => apiClient.get('/selling-points');

@@ -316,6 +316,7 @@ const SellingPointsPage = () => {
                                                             <th>Дата</th>
                                                             <th>Товар</th>
                                                             <th>Количество</th>
+                                                            <th>Сумма</th>
                                                             <th>Примечания</th>
                                                         </tr>
                                                     </thead>
@@ -336,6 +337,12 @@ const SellingPointsPage = () => {
                                                                 </td>
                                                                 <td className="quantity-cell">
                                                                     {replenishment.quantity}
+                                                                </td>
+                                                                <td className="amount-cell">
+                                                                    {replenishment.productId?.price 
+                                                                        ? `${(replenishment.quantity * replenishment.productId.price).toFixed(2)} руб.`
+                                                                        : '-'
+                                                                    }
                                                                 </td>
                                                                 <td className="notes-cell">
                                                                     {replenishment.notes || '-'}
@@ -448,6 +455,7 @@ const SellingPointsPage = () => {
                                                 <th>Было</th>
                                                 <th>Стало</th>
                                                 <th>Изменение</th>
+                                                <th>Сумма изменения</th>
                                                 <th>Примечания</th>
                                             </tr>
                                         </thead>
@@ -480,6 +488,12 @@ const SellingPointsPage = () => {
                                                     </td>
                                                     <td className={`quantity-cell ${log.countChange > 0 ? 'positive' : 'negative'}`}>
                                                         {log.countChange > 0 ? '+' : ''}{log.countChange}
+                                                    </td>
+                                                    <td className={`amount-cell ${log.countChange > 0 ? 'positive' : 'negative'}`}>
+                                                        {log.productId?.price 
+                                                            ? `${log.countChange > 0 ? '+' : ''}${(log.countChange * log.productId.price).toFixed(2)} руб.`
+                                                            : '-'
+                                                        }
                                                     </td>
                                                     <td className="notes-cell">
                                                         {log.notes || '-'}

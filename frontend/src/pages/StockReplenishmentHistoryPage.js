@@ -94,6 +94,7 @@ const StockReplenishmentHistoryPage = () => {
                                         <th>Точка продаж</th>
                                         <th>Товар</th>
                                         <th>Количество</th>
+                                        <th>Сумма</th>
                                         <th>Примечания</th>
                                     </tr>
                                 </thead>
@@ -111,6 +112,12 @@ const StockReplenishmentHistoryPage = () => {
                                             </td>
                                             <td className="quantity-cell">
                                                 {replenishment.quantity}
+                                            </td>
+                                            <td className="amount-cell">
+                                                {replenishment.productId?.price 
+                                                    ? `${(replenishment.quantity * replenishment.productId.price).toFixed(2)} руб.`
+                                                    : '-'
+                                                }
                                             </td>
                                             <td className="notes-cell">
                                                 {replenishment.notes || '-'}

@@ -26,7 +26,7 @@ router.get('/history', async (req, res) => {
     try {
         const history = await StockReplenishment.find()
             .populate('sellingPointId', 'name')
-            .populate('productId', 'name')
+            .populate('productId', 'name price')
             .sort({ date: -1 });
         res.json(history);
     } catch (err) {
