@@ -2,15 +2,44 @@ const express = require('express');
 const router = express.Router();
 const SellingPoint = require('../models/SellingPoint');
 const Product = require('../models/Product');
+const Sales = require('../models/Sales');
 const auth = require('../middleware/auth');
 
 // @route   GET api/selling-points
-// @desc    Get all selling points
+// @desc    Get all selling points with sales totals
 // @access  Public
 router.get('/', async (req, res) => {
   try {
     const sellingPoints = await SellingPoint.find().populate('inventory.productId', 'name price');
-    res.json(sellingPoints);
+    
+    // Calculate sales totals for each selling point
+    const sellingPointsWithSales = await Promise.all(
+      sellingPoints.map(async (sellingPoint) => {
+        // Get total sales for this selling point
+        const salesTotal = await Sales.aggregate([
+          {
+            $match: { sellingPointId: sellingPoint._id }
+          },
+          {
+            $group: {
+              _id: null,
+              totalSales: { $sum: '$totalSales' }
+            }
+          }
+        ]);
+
+        const totalSalesAmount = salesTotal.length > 0 ? salesTotal[0].totalSales : 0;
+        const remainingValue = sellingPoint.inventoryTotalValue - totalSalesAmount;
+
+        return {
+          ...sellingPoint.toObject(),
+          totalSales: totalSalesAmount,
+          remainingValue: remainingValue
+        };
+      })
+    );
+
+    res.json(sellingPointsWithSales);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts } from '../services/api';
 import Card from '../components/Card';
-import Pagination from '../components/Pagination';
 import './Page.css';
 
 const ProductsPage = () => {
     const [products, setProducts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     useEffect(() => {
         fetchProducts();
@@ -18,38 +15,28 @@ const ProductsPage = () => {
         setProducts(data);
     };
 
-    const getPaginatedProducts = () => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        return products.slice(startIndex, endIndex);
-    };
-
-    const handleItemsPerPageChange = (newItemsPerPage) => {
-        setItemsPerPage(newItemsPerPage);
-        setCurrentPage(1);
-    };
-
     return (
         <div>
             <h1>Товары</h1>
             <Card title="Список товаров">
-                <ul className="list">
-                    {getPaginatedProducts().map((product) => (
-                        <li key={product._id} className="list-item">
-                            <span>{product.name} - {product.price} руб.</span>
-                        </li>
-                    ))}
-                </ul>
-                
-                {products.length > 10 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalItems={products.length}
-                        itemsPerPage={itemsPerPage}
-                        onPageChange={setCurrentPage}
-                        onItemsPerPageChange={handleItemsPerPageChange}
-                    />
-                )}
+                <div className="products-table-container">
+                    <table className="products-table">
+                        <thead>
+                            <tr>
+                                <th>Название товара</th>
+                                <th>Цена</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {products.map((product) => (
+                                <tr key={product._id}>
+                                    <td style={{ textAlign: 'left' }}>{product.name}</td>
+                                    <td style={{ textAlign: 'center' }}>{product.price} руб.</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </Card>
         </div>
     );

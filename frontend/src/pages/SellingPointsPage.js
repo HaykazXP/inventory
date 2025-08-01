@@ -213,7 +213,22 @@ const SellingPointsPage = () => {
                         <Card title="Стоимость товаров">
                             <div className="summary-value">
                                 {formatCurrency(activeSellingPoint.inventoryTotalValue || 0)}
+                                {activeSellingPoint.totalSales !== undefined && (
+                                    <span style={{ color: '#666', fontSize: '0.9em' }}>
+                                        {' '}({formatCurrency(activeSellingPoint.totalSales || 0)})
+                                    </span>
+                                )}
                             </div>
+                            {activeSellingPoint.remainingValue !== undefined && (
+                                <div style={{ 
+                                    fontSize: '0.85em', 
+                                    color: activeSellingPoint.remainingValue >= 0 ? '#28a745' : '#dc3545',
+                                    marginTop: '5px',
+                                    fontWeight: 'bold'
+                                }}>
+                                    Остаток: {formatCurrency(activeSellingPoint.remainingValue)}
+                                </div>
+                            )}
                         </Card>
                     </div>
 
