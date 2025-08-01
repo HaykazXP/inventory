@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { login as loginAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ const Login = () => {
         password: ''
     });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const { login, password } = formData;
@@ -16,6 +18,9 @@ const Login = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
+        
         try {
             const res = await loginAPI({ login, password });
             
@@ -29,38 +34,70 @@ const Login = () => {
             
             navigate('/dashboard');
         } catch (err) {
-            setError('Invalid credentials');
+            setError('Неверный логин или пароль');
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div>
-            <h2>Вход</h2>
-{error && <p style={{ color: 'red' }}>{error}</p>}
-<form onSubmit={onSubmit}>
-    <div>
-        <input
-            type="text"
-            placeholder="Логин"
-            name="login"
-            value={login}
-            onChange={onChange}
-            required
-        />
-    </div>
-    <div>
-        <input
-            type="password"
-            placeholder="Пароль"
-            name="password"
-            value={password}
-            onChange={onChange}
-            required
-        />
-    </div>
-    <button type="submit">Войти</button>
-</form>
+        <div className="login-form-container">
+            <div className="login-form-header">
+                <h2>Вход в систему</h2>
+            </div>
+            
+            {error && (
+                <div className="error-message">
+                    <span className="error-icon">⚠️</span>
+                    {error}
+                </div>
+            )}
+            
+            <form onSubmit={onSubmit} className="login-form">
+                <div className="form-group">
+                    <label htmlFor="login">Логин</label>
+                    <input
+                        id="login"
+                        type="text"
+                        placeholder="Введите логин"
+                        name="login"
+                        value={login}
+                        onChange={onChange}
+                        required
+                        className="form-input"
+                    />
+                </div>
+                
+                <div className="form-group">
+                    <label htmlFor="password">Пароль</label>
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Введите пароль"
+                        name="password"
+                        value={password}
+                        onChange={onChange}
+                        required
+                        className="form-input"
+                    />
+                </div>
+                
+                <button 
+                    type="submit" 
+                    className={`login-button ${loading ? 'loading' : ''}`}
+                    disabled={loading}
+                >
+                    {loading ? (
+                        <>
+                            <span className="loading-spinner"></span>
+                            Вход...
+                        </>
+                    ) : (
+                        'Войти'
+                    )}
+                </button>
+            </form>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import AddProductModal from '../components/AddProductModal';
 import AddStockReplenishmentModal from '../components/AddStockReplenishmentModal';
 import AddSaleModal from '../components/AddSaleModal';
+import WeeklyInventoryModal from '../components/WeeklyInventoryModal';
 import Pagination from '../components/Pagination';
 import './Page.css';
 
@@ -24,6 +25,7 @@ const SellingPointsPage = () => {
     const [salesRecords, setSalesRecords] = useState([]);
     const [salesPage, setSalesPage] = useState(1);
     const [salesItemsPerPage, setSalesItemsPerPage] = useState(10);
+    const [isWeeklyInventoryModalOpen, setIsWeeklyInventoryModalOpen] = useState(false);
 
     const subTabs = [
         { id: 0, name: 'Товары' },
@@ -93,6 +95,12 @@ const SellingPointsPage = () => {
     const handleSaleSuccess = () => {
         fetchSalesRecords(); // Refresh sales records after successful addition
         fetchSellingPoints(); // Also refresh selling points to update cash
+    };
+
+    const handleWeeklyInventorySuccess = () => {
+        fetchSellingPoints(); // Refresh selling points after inventory check
+        fetchInventoryLogs(); // Refresh inventory logs
+        fetchSalesRecords(); // Refresh sales records as well
     };
 
     const formatCurrency = (amount) => {
@@ -435,7 +443,20 @@ const SellingPointsPage = () => {
                             {activeSubTab === 3 && (
                                 /* Расчет по количеству Tab */
                                 <Card title="Расчет по количеству">
-                                    <p>Содержимое раздела "Расчет по количеству" будет добавлено позже.</p>
+                                    <div className="weekly-inventory-section">
+                                        <p>
+                                            Инвентаризация позволяет сравнить фактическое количество товаров с данными системы 
+                                            и рассчитать соответствие продажам за период.
+                                        </p>
+                                        <div className="action-buttons">
+                                            <Button 
+                                                onClick={() => setIsWeeklyInventoryModalOpen(true)}
+                                                variant="primary"
+                                            >
+                                                Начать инвентаризацию
+                                            </Button>
+                                        </div>
+                                    </div>
                                 </Card>
                             )}
                         </div>
@@ -551,6 +572,17 @@ const SellingPointsPage = () => {
                     sellingPointId={activeSellingPoint._id}
                     sellingPointName={activeSellingPoint.name}
                     onSuccess={handleSaleSuccess}
+                />
+            )}
+
+            {/* Weekly Inventory Modal */}
+            {activeSellingPoint && (
+                <WeeklyInventoryModal
+                    isOpen={isWeeklyInventoryModalOpen}
+                    onClose={() => setIsWeeklyInventoryModalOpen(false)}
+                    sellingPointId={activeSellingPoint._id}
+                    sellingPointName={activeSellingPoint.name}
+                    onSuccess={handleWeeklyInventorySuccess}
                 />
             )}
         </div>

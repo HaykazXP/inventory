@@ -6,10 +6,62 @@ const Product = require('../models/Product');
 const Sales = require('../models/Sales');
 const auth = require('../middleware/auth');
 
-// @route   POST api/inventory/weekly-check
+// @route   GET api/weekly-inventory/data/:sellingPointId
+// @desc    Get selling point inventory data for weekly check
+// @access  Private
+router.get('/data/:sellingPointId', auth, async (req, res) => {
+    try {
+        const sellingPoint = await SellingPoint.findById(req.params.sellingPointId)
+            .populate('inventory.productId', 'name price');
+        
+        if (!sellingPoint) {
+            return res.status(404).json({ msg: 'Selling point not found' });
+        }
+
+        // Get the last weekly inventory date for this selling point
+        const lastWeeklyCheck = await WeeklyInventory.findOne({
+            sellingPointId: req.params.sellingPointId
+        }).sort({ date: -1 });
+
+        const lastCheckDate = lastWeeklyCheck ? lastWeeklyCheck.date : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        
+        // Calculate sales total from last check to today
+        const salesData = await Sales.find({
+            sellingPointId: req.params.sellingPointId,
+            date: { $gte: lastCheckDate, $lte: new Date() }
+        });
+
+        const weekSalesTotal = salesData.reduce((acc, sale) => acc + sale.totalSales, 0);
+
+        // Prepare inventory data
+        const inventoryData = sellingPoint.inventory.map(item => ({
+            _id: item._id,
+            productId: item.productId._id,
+            productName: item.productId.name,
+            productPrice: item.productId.price,
+            currentQuantity: item.quantity,
+            lastUpdated: item.lastUpdated
+        }));
+
+        res.json({
+            sellingPoint: {
+                _id: sellingPoint._id,
+                name: sellingPoint.name
+            },
+            inventory: inventoryData,
+            weekSalesTotal,
+            lastCheckDate: lastCheckDate
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route   POST api/weekly-inventory/check
 // @desc    Perform a weekly inventory check
 // @access  Private
-router.post('/weekly-check', auth, async (req, res) => {
+router.post('/check', auth, async (req, res) => {
     const { sellingPointId, date, inventoryItems } = req.body;
 
     try {
@@ -97,10 +149,10 @@ router.post('/weekly-check', auth, async (req, res) => {
     }
 });
 
-// @route   GET api/inventory/weekly-checks
+// @route   GET api/weekly-inventory/checks
 // @desc    Get all weekly inventory checks
 // @access  Public
-router.get('/weekly-checks', async (req, res) => {
+router.get('/checks', async (req, res) => {
     try {
         const checks = await WeeklyInventory.find()
             .populate('sellingPointId', 'name')
@@ -113,7 +165,7 @@ router.get('/weekly-checks', async (req, res) => {
     }
 });
 
-// @route   GET api/inventory/discrepancies
+// @route   GET api/weekly-inventory/discrepancies
 // @desc    Get inventory checks with discrepancies
 // @access  Public
 router.get('/discrepancies', async (req, res) => {

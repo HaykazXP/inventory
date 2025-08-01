@@ -30,6 +30,23 @@
     gap: 0.5rem;
 }
 
+/* Weekly Inventory Section */
+.weekly-inventory-section {
+    padding: 1rem 0;
+}
+
+.weekly-inventory-section p {
+    margin-bottom: 1.5rem;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 /* Tabs Styles */
 .tabs {
     margin-bottom: 1.5rem;

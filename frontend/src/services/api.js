@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:3001/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -32,8 +32,8 @@ apiClient.interceptors.response.use(
       
       if (refreshToken) {
         try {
-          // Try to refresh the token
-          const refreshResponse = await axios.post('/api/auth/refresh', {
+          // Try to refresh the token (use axios directly to avoid interceptor loops)
+          const refreshResponse = await axios.post('http://localhost:3001/api/auth/refresh', {
             refreshToken: refreshToken
           });
           
@@ -65,9 +65,28 @@ apiClient.interceptors.response.use(
   }
 );
 
-// Auth endpoints
-export const login = (credentials) => axios.post('/api/auth/login', credentials);
-export const refreshToken = (refreshToken) => axios.post('/api/auth/refresh', { refreshToken });
+// Auth endpoints  
+export const login = (credentials) => axios.post('http://localhost:3001/api/auth/login', credentials);
+export const refreshTokenRequest = (refreshToken) => axios.post('http://localhost:3001/api/auth/refresh', { refreshToken });
+
+// Logout function
+export const logout = () => {
+  // Clear all authentication tokens
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('tokenExpiry');
+  
+  // Clear any weekly inventory drafts as well
+  const keys = Object.keys(localStorage);
+  keys.forEach(key => {
+    if (key.startsWith('weekly-inventory-')) {
+      localStorage.removeItem(key);
+    }
+  });
+  
+  // Redirect to login page
+  window.location.href = '/login';
+};
 
 // Product endpoints
 export const getProducts = () => apiClient.get('/products');
@@ -88,5 +107,10 @@ export const addSalesRecord = (data) => apiClient.post('/sales', data);
 export const getSalesRecords = () => apiClient.get('/sales');
 export const getDailySales = (date) => apiClient.get(`/sales/daily/${date}`);
 export const getWeeklySales = (startDate, endDate) => apiClient.get(`/sales/weekly/${startDate}/${endDate}`);
+
+// Weekly Inventory endpoints
+export const getWeeklyInventoryData = (sellingPointId) => apiClient.get(`/weekly-inventory/data/${sellingPointId}`);
+export const submitWeeklyInventoryCheck = (data) => apiClient.post('/weekly-inventory/check', data);
+export const getWeeklyInventoryChecks = () => apiClient.get('/weekly-inventory/checks');
 
 export default apiClient;
