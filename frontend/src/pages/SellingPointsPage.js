@@ -210,25 +210,27 @@ const SellingPointsPage = () => {
                             </div>
                         </Card>
                         
-                        <Card title="Стоимость товаров">
-                            <div className="summary-value">
-                                {formatCurrency(activeSellingPoint.inventoryTotalValue || 0)}
-                                {activeSellingPoint.totalSales !== undefined && (
-                                    <span style={{ color: '#666', fontSize: '0.9em' }}>
-                                        {' '}({formatCurrency(activeSellingPoint.totalSales || 0)})
-                                    </span>
-                                )}
+                        <Card title="Товаров на сумму">
+                            {/* Main big number - Остаток without label */}
+                            <div className="summary-value" style={{ 
+                                fontSize: '1.5em',
+                                fontWeight: 'bold',
+                                color: activeSellingPoint.remainingValue >= 0 ? '#28a745' : '#dc3545'
+                            }}>
+                                {formatCurrency(activeSellingPoint.remainingValue || 0)}
                             </div>
-                            {activeSellingPoint.remainingValue !== undefined && (
-                                <div style={{ 
-                                    fontSize: '0.85em', 
-                                    color: activeSellingPoint.remainingValue >= 0 ? '#28a745' : '#dc3545',
-                                    marginTop: '5px',
-                                    fontWeight: 'bold'
-                                }}>
-                                    Остаток: {formatCurrency(activeSellingPoint.remainingValue)}
-                                </div>
-                            )}
+                        </Card>
+                        
+                        <Card title="Стоимость товаров до пересчета">
+                            <div className="summary-value" style={{ fontSize: '1.1em' }}>
+                                {formatCurrency(activeSellingPoint.inventoryTotalValue || 0)}
+                            </div>
+                        </Card>
+                        
+                        <Card title="Продажи до пересчета">
+                            <div className="summary-value" style={{ fontSize: '1.1em' }}>
+                                {formatCurrency(activeSellingPoint.totalSales || 0)}
+                            </div>
                         </Card>
                     </div>
 
