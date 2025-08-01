@@ -26,4 +26,10 @@ export const addProductToSellingPoint = (data) => apiClient.post('/inventory/rep
 export const getStockReplenishments = () => apiClient.get('/inventory/history');
 export const getInventoryLogs = () => apiClient.get('/inventory/logs');
 
+// Sales endpoints
+export const addSalesRecord = (data) => apiClient.post('/sales', data);
+export const getSalesRecords = () => apiClient.get('/sales');
+export const getDailySales = (date) => apiClient.get(`/sales/daily/${date}`);
+export const getWeeklySales = (startDate, endDate) => apiClient.get(`/sales/weekly/${startDate}/${endDate}`);
+
 export default apiClient;

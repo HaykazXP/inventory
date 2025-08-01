@@ -10,15 +10,37 @@ router.post('/', auth, async (req, res) => {
     const { sellingPointId, date, cashSales, nonCashSales } = req.body;
 
     try {
+        console.log('Received sales data:', { sellingPointId, date, cashSales, nonCashSales });
+        
+        // Create the sales record
+        const cashAmount = parseFloat(cashSales) || 0;
+        const nonCashAmount = parseFloat(nonCashSales) || 0;
+        const totalAmount = cashAmount + nonCashAmount;
+        
+        console.log('Parsed amounts:', { cashAmount, nonCashAmount, totalAmount });
+        
         const newSales = new Sales({
             sellingPointId,
             date,
-            cashSales,
-            nonCashSales,
+            cashSales: cashAmount,
+            nonCashSales: nonCashAmount,
+            totalSales: totalAmount
         });
 
         const sales = await newSales.save();
-        res.json(sales);
+
+        // Update selling point cash if there are cash sales
+        if (cashAmount > 0) {
+            const SellingPoint = require('../models/SellingPoint');
+            await SellingPoint.findByIdAndUpdate(
+                sellingPointId,
+                { $inc: { cash: cashAmount } },
+                { new: true }
+            );
+        }
+
+        const populatedSales = await Sales.findById(sales._id).populate('sellingPointId', 'name');
+        res.json(populatedSales);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

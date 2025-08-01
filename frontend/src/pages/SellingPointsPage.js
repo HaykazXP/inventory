@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getSellingPoints, getStockReplenishments, getInventoryLogs } from '../services/api';
+import { getSellingPoints, getStockReplenishments, getInventoryLogs, getSalesRecords } from '../services/api';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import AddProductModal from '../components/AddProductModal';
 import AddStockReplenishmentModal from '../components/AddStockReplenishmentModal';
+import AddSaleModal from '../components/AddSaleModal';
 import Pagination from '../components/Pagination';
 import './Page.css';
 
@@ -19,6 +20,10 @@ const SellingPointsPage = () => {
     const [stockReplenishmentItemsPerPage, setStockReplenishmentItemsPerPage] = useState(10);
     const [inventoryLogsPage, setInventoryLogsPage] = useState(1);
     const [inventoryLogsItemsPerPage, setInventoryLogsItemsPerPage] = useState(10);
+    const [isSaleModalOpen, setIsSaleModalOpen] = useState(false);
+    const [salesRecords, setSalesRecords] = useState([]);
+    const [salesPage, setSalesPage] = useState(1);
+    const [salesItemsPerPage, setSalesItemsPerPage] = useState(10);
 
     const subTabs = [
         { id: 0, name: 'Товары' },
@@ -31,6 +36,7 @@ const SellingPointsPage = () => {
         fetchSellingPointsInitial();
         fetchStockReplenishments();
         fetchInventoryLogs();
+        fetchSalesRecords();
     }, []);
 
     const fetchSellingPoints = async () => {
@@ -64,6 +70,15 @@ const SellingPointsPage = () => {
         }
     };
 
+    const fetchSalesRecords = async () => {
+        try {
+            const { data } = await getSalesRecords();
+            setSalesRecords(data);
+        } catch (error) {
+            console.error('Error fetching sales records:', error);
+        }
+    };
+
     const handleModalSuccess = () => {
         fetchSellingPoints(); // Refresh data after successful addition without changing tab
         fetchInventoryLogs(); // Refresh inventory logs
@@ -73,6 +88,11 @@ const SellingPointsPage = () => {
         fetchStockReplenishments(); // Refresh stock replenishments after successful addition
         fetchSellingPoints(); // Also refresh selling points to update inventory
         fetchInventoryLogs(); // Refresh inventory logs
+    };
+
+    const handleSaleSuccess = () => {
+        fetchSalesRecords(); // Refresh sales records after successful addition
+        fetchSellingPoints(); // Also refresh selling points to update cash
     };
 
     const formatCurrency = (amount) => {
@@ -119,6 +139,27 @@ const SellingPointsPage = () => {
     const handleInventoryLogsItemsPerPageChange = (newItemsPerPage) => {
         setInventoryLogsItemsPerPage(newItemsPerPage);
         setInventoryLogsPage(1);
+    };
+
+    // Sales pagination helpers
+    const getFilteredSalesRecords = () => {
+        return salesRecords.filter(sale => sale.sellingPointId && sale.sellingPointId._id === activeSellingPoint._id);
+    };
+
+    const getPaginatedSalesRecords = () => {
+        const filteredData = getFilteredSalesRecords();
+        const startIndex = (salesPage - 1) * salesItemsPerPage;
+        const endIndex = startIndex + salesItemsPerPage;
+        return filteredData.slice(startIndex, endIndex);
+    };
+
+    const handleSalesPageChange = (newPage) => {
+        setSalesPage(newPage);
+    };
+
+    const handleSalesItemsPerPageChange = (newItemsPerPage) => {
+        setSalesItemsPerPage(newItemsPerPage);
+        setSalesPage(1);
     };
 
     if (sellingPoints.length === 0) {
@@ -313,9 +354,65 @@ const SellingPointsPage = () => {
 
                             {activeSubTab === 3 && (
                                 /* Расчет по деньгам Tab */
-                                <Card title="Расчет по деньгам">
-                                    <p>Содержимое раздела "Расчет по деньгам" будет добавлено позже.</p>
-</Card>
+                                <Card>
+                                    <div className="card-header-with-action">
+                                        <h3 className="card-title">Продажи</h3>
+                                        <Button onClick={() => setIsSaleModalOpen(true)}>
+                                            Добавить продажи
+                                        </Button>
+                                    </div>
+                                    {getFilteredSalesRecords().length > 0 ? (
+                                        <>
+                                            <div className="sales-table-container">
+                                                <table className="sales-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Дата</th>
+                                                            <th>Наличные</th>
+                                                            <th>Безналичные</th>
+                                                            <th>Итого</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {getPaginatedSalesRecords().map((sale) => (
+                                                            <tr key={sale._id}>
+                                                                <td className="date-cell">
+                                                                    {new Date(sale.date).toLocaleDateString('ru-RU', {
+                                                                        day: '2-digit',
+                                                                        month: '2-digit',
+                                                                        year: 'numeric'
+                                                                    })}
+                                                                </td>
+                                                                <td className="price-cell">
+                                                                    {formatCurrency(sale.cashSales)}
+                                                                </td>
+                                                                <td className="price-cell">
+                                                                    {formatCurrency(sale.nonCashSales)}
+                                                                </td>
+                                                                <td className="total-cell">
+                                                                    {formatCurrency(sale.totalSales)}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
+                                            <Pagination
+                                                currentPage={salesPage}
+                                                totalItems={getFilteredSalesRecords().length}
+                                                itemsPerPage={salesItemsPerPage}
+                                                onPageChange={handleSalesPageChange}
+                                                onItemsPerPageChange={handleSalesItemsPerPageChange}
+                                            />
+                                        </>
+                                    ) : (
+                                        <div className="empty-sales">
+                                            <p>Записи о продажах для данной точки отсутствуют</p>
+                                            <p>Добавьте первую запись о продажах, чтобы отслеживать доходы.</p>
+                                        </div>
+                                    )}
+                                </Card>
                             )}
                         </div>
                     </div>
@@ -412,6 +509,17 @@ const SellingPointsPage = () => {
                     sellingPointId={activeSellingPoint._id}
                     sellingPointName={activeSellingPoint.name}
                     onSuccess={handleStockReplenishmentSuccess}
+                />
+            )}
+
+            {/* Add Sale Modal */}
+            {activeSellingPoint && (
+                <AddSaleModal
+                    isOpen={isSaleModalOpen}
+                    onClose={() => setIsSaleModalOpen(false)}
+                    sellingPointId={activeSellingPoint._id}
+                    sellingPointName={activeSellingPoint.name}
+                    onSuccess={handleSaleSuccess}
                 />
             )}
         </div>

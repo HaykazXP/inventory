@@ -377,11 +377,43 @@
     width: 100%;
 }
 
+/* Sales Table Styles */
+.sales-table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+    width: 100%;
+}
+
 .inventory-logs-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
     background: white;
+}
+
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: white;
+}
+
+.sales-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sales-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
 }
 
 .inventory-logs-table th {
@@ -408,6 +440,10 @@
 }
 
 .inventory-logs-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.sales-table tbody tr:hover {
     background-color: #f8f9fa;
 }
 
@@ -450,6 +486,15 @@
 }
 
 .empty-logs {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+.empty-sales {
     text-align: center;
     padding: 2rem;
     color: #6c757d;

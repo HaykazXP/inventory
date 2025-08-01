@@ -30,7 +30,10 @@ const salesSchema = new Schema({
 });
 
 salesSchema.pre('save', function(next) {
-  this.totalSales = this.cashSales + this.nonCashSales;
+  // Only calculate if totalSales is not already set
+  if (!this.totalSales && this.totalSales !== 0) {
+    this.totalSales = this.cashSales + this.nonCashSales;
+  }
   next();
 });
 
