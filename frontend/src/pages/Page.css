@@ -36,10 +36,13 @@
 }
 
 .tabs-header {
-    display: flex;
-    gap: 0.25rem;
     border-bottom: 2px solid #e9ecef;
     margin-bottom: 1rem;
+}
+
+.tabs-list {
+    display: flex;
+    gap: 0.25rem;
 }
 
 .tab-button {
@@ -81,6 +84,12 @@
     padding: 0.5rem 0;
 }
 
+.summary-info {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
 /* Product Info */
 .product-info {
     display: flex;
@@ -119,4 +128,295 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Card Header with Action */
+.card-header-with-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Sub Tabs Styles */
+.sub-tabs {
+    margin-top: 1.5rem;
+}
+
+.sub-tabs-header {
+    display: flex;
+    gap: 0.125rem;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+    background-color: #f8f9fa;
+    padding: 0.25rem;
+    border-radius: 4px 4px 0 0;
+}
+
+.sub-tab-button {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: #6c757d;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    border-radius: 4px;
+}
+
+.sub-tab-button:hover {
+    color: #495057;
+    background-color: #e9ecef;
+}
+
+.sub-tab-button.active {
+    color: #0056b3;
+    background-color: white;
+    font-weight: 500;
+    border-bottom-color: #0056b3;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sub-tab-content {
+    animation: fadeIn 0.15s ease-in;
+}
+
+/* Products Table Styles */
+.products-table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: white;
+}
+
+.products-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.products-table th:first-child {
+    text-align: left;
+}
+
+.products-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.products-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.product-name-cell {
+    font-weight: 500;
+    color: #212529;
+    text-align: left;
+    width: 40%;
+}
+
+.quantity-cell {
+    text-align: center;
+    font-weight: 500;
+    color: #495057;
+    width: 15%;
+}
+
+.price-cell {
+    text-align: center;
+    color: #28a745;
+    font-weight: 500;
+    width: 20%;
+}
+
+.total-cell {
+    text-align: center;
+    color: #007bff;
+    font-weight: 600;
+    width: 25%;
+}
+
+.empty-products {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+/* Stock Replenishments Table Styles */
+.stock-replenishments-table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.stock-replenishments-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: white;
+}
+
+.stock-replenishments-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.stock-replenishments-table th:first-child {
+    text-align: left;
+}
+
+.stock-replenishments-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.stock-replenishments-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.date-cell {
+    font-weight: 500;
+    color: #495057;
+    text-align: left;
+    width: 20%;
+    font-size: 0.8rem;
+}
+
+.notes-cell {
+    color: #6c757d;
+    text-align: left;
+    width: 30%;
+    font-style: italic;
+}
+
+.selling-point-cell {
+    font-weight: 500;
+    color: #495057;
+    text-align: left;
+    width: 25%;
+}
+
+.empty-replenishments {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+/* Inventory Logs Table Styles */
+.inventory-logs-table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.inventory-logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: white;
+}
+
+.inventory-logs-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.inventory-logs-table th:first-child,
+.inventory-logs-table th:nth-child(2),
+.inventory-logs-table th:last-child {
+    text-align: left;
+}
+
+.inventory-logs-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.inventory-logs-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.change-type-cell {
+    text-align: center;
+    width: 12%;
+}
+
+.change-type {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.change-type.addition {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.change-type.subtraction {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.change-type.adjustment {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.positive {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.negative {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.empty-logs {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 1rem;
 }

@@ -3,6 +3,7 @@ const router = express.Router();
 const SellingPoint = require('../models/SellingPoint');
 const Product = require('../models/Product');
 const StockReplenishment = require('../models/StockReplenishment');
+const InventoryLog = require('../models/InventoryLog');
 const auth = require('../middleware/auth');
 
 // @route   GET api/inventory
@@ -12,6 +13,38 @@ router.get('/', async (req, res) => {
     try {
         const sellingPoints = await SellingPoint.find().populate('inventory.productId', 'name price');
         res.json(sellingPoints);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route   GET api/inventory/history
+// @desc    Get stock replenishment history
+// @access  Public
+router.get('/history', async (req, res) => {
+    try {
+        const history = await StockReplenishment.find()
+            .populate('sellingPointId', 'name')
+            .populate('productId', 'name')
+            .sort({ date: -1 });
+        res.json(history);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route   GET api/inventory/logs
+// @desc    Get inventory change logs
+// @access  Public
+router.get('/logs', async (req, res) => {
+    try {
+        const logs = await InventoryLog.find()
+            .populate('sellingPointId', 'name')
+            .populate('productId', 'name price')
+            .sort({ date: -1 });
+        res.json(logs);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -51,13 +84,17 @@ router.post('/replenish', auth, async (req, res) => {
             return res.status(404).json({ msg: 'Product not found' });
         }
 
-        // Update inventory in SellingPoint
+        // Get old value for logging
         const itemIndex = sellingPoint.inventory.findIndex(p => p.productId.toString() === productId);
+        const oldValue = itemIndex > -1 ? sellingPoint.inventory[itemIndex].quantity : 0;
+        const newValue = oldValue + quantity;
+        
+        // Update inventory in SellingPoint
         if (itemIndex > -1) {
-            sellingPoint.inventory[itemIndex].quantity += quantity;
+            sellingPoint.inventory[itemIndex].quantity = newValue;
             sellingPoint.inventory[itemIndex].lastUpdated = Date.now();
         } else {
-            sellingPoint.inventory.push({ productId, quantity, lastUpdated: Date.now() });
+            sellingPoint.inventory.push({ productId, quantity: newValue, lastUpdated: Date.now() });
         }
         
         let totalValue = 0;
@@ -70,6 +107,19 @@ router.post('/replenish', auth, async (req, res) => {
         sellingPoint.inventoryTotalValue = totalValue;
 
         await sellingPoint.save();
+
+        // Create inventory log entry
+        const inventoryLog = new InventoryLog({
+            sellingPointId,
+            productId,
+            changeType: 'addition',
+            oldValue,
+            newValue,
+            countChange: quantity,
+            notes
+        });
+
+        await inventoryLog.save();
         
         // Create a record in stock replenishment history
         const newReplenishment = new StockReplenishment({
@@ -82,22 +132,6 @@ router.post('/replenish', auth, async (req, res) => {
         const replenishment = await newReplenishment.save();
         res.json(replenishment);
 
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-});
-
-// @route   GET api/inventory/history
-// @desc    Get stock replenishment history
-// @access  Public
-router.get('/history', async (req, res) => {
-    try {
-        const history = await StockReplenishment.find()
-            .populate('sellingPointId', 'name')
-            .populate('productId', 'name')
-            .sort({ date: -1 });
-        res.json(history);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

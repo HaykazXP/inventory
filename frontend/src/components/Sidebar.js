@@ -12,7 +12,7 @@ const Sidebar = () => {
     <NavLink to="/dashboard" className="nav-link">Главная</NavLink>
     <NavLink to="/products" className="nav-link">Товары</NavLink>
     <NavLink to="/selling-points" className="nav-link">Точки продаж</NavLink>
-    <NavLink to="/inventory" className="nav-link">Склад</NavLink>
+    <NavLink to="/stock-history" className="nav-link">История закупок</NavLink>
 </nav>
         </div>
     );

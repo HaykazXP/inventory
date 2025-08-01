@@ -18,15 +18,15 @@ const ProductsPage = () => {
     return (
         <div>
             <h1>Товары</h1>
-<Card title="Список товаров">
-    <ul className="list">
-        {products.map((product) => (
-            <li key={product._id} className="list-item">
-                <span>{product.name} - {product.price} руб.</span>
-            </li>
-        ))}
-    </ul>
-</Card>
+            <Card title="Список товаров">
+                <ul className="list">
+                    {products.map((product) => (
+                        <li key={product._id} className="list-item">
+                            <span>{product.name} - {product.price} руб.</span>
+                        </li>
+                    ))}
+                </ul>
+            </Card>
         </div>
     );
 };
