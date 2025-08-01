@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage.js';
 import ProductsPage from './pages/ProductsPage.js';
 import SellingPointsPage from './pages/SellingPointsPage.js';
 import StockReplenishmentHistoryPage from './pages/StockReplenishmentHistoryPage.js';
+import NonCashPage from './pages/NonCashPage.js';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/selling-points" element={<SellingPointsPage />} />
             <Route path="/stock-history" element={<StockReplenishmentHistoryPage />} />
+            <Route path="/non-cash" element={<NonCashPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

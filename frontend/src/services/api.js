@@ -113,4 +113,10 @@ export const getWeeklyInventoryData = (sellingPointId) => apiClient.get(`/weekly
 export const submitWeeklyInventoryCheck = (data) => apiClient.post('/weekly-inventory/check', data);
 export const getWeeklyInventoryChecks = () => apiClient.get('/weekly-inventory/checks');
 
+// Non-Cash endpoints
+export const getNonCashSummary = () => apiClient.get('/non-cash/summary');
+export const getNonCashRecords = () => apiClient.get('/non-cash/records');
+export const createNonCashWithdrawal = (data) => apiClient.post('/non-cash/withdraw', data);
+export const getNonCashWithdrawals = () => apiClient.get('/non-cash/withdrawals');
+
 export default apiClient;

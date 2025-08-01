@@ -20,6 +20,7 @@ const Sidebar = () => {
                 <NavLink to="/products" className="nav-link">Товары</NavLink>
                 <NavLink to="/selling-points" className="nav-link">Точки продаж</NavLink>
                 <NavLink to="/stock-history" className="nav-link">История закупок</NavLink>
+                <NavLink to="/non-cash" className="nav-link">Безналичные</NavLink>
             </nav>
             <div className="sidebar-footer">
                 <button onClick={handleLogout} className="logout-button">
