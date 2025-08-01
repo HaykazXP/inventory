@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const SellingPoint = require('../models/SellingPoint');
 
 const sellingPoints = [
-  { name: 'Сокол' },
-  { name: 'Михалково' },
-  { name: 'Коптевский бульвар' },
-  { name: 'Тимирязевская' },
-  { name: 'Флотская' },
-  { name: 'Димитровское' },
+  { name: 'Сокол', cash: 15000 },
+  { name: 'Михалково', cash: 12500 },
+  { name: 'Коптевский бульвар', cash: 18750 },
+  { name: 'Тимирязевская', cash: 21000 },
+  { name: 'Флотская', cash: 16800 },
+  { name: 'Димитровское', cash: 14200 },
 ];
 
 const seedSellingPoints = async () => {

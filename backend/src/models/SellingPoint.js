@@ -7,6 +7,12 @@ const sellingPointSchema = new Schema({
     required: true,
     trim: true
   },
+  cash: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: 0
+  },
   inventory: [
     {
       productId: {
