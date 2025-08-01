@@ -119,4 +119,11 @@ export const getNonCashRecords = () => apiClient.get('/non-cash/records');
 export const createNonCashWithdrawal = (data) => apiClient.post('/non-cash/withdraw', data);
 export const getNonCashWithdrawals = () => apiClient.get('/non-cash/withdrawals');
 
+// Cash endpoints
+export const getCashSummary = () => apiClient.get('/cash/summary');
+export const getCashRecords = () => apiClient.get('/cash/records');
+export const createCashWithdrawal = (sellingPointId, data) => apiClient.post(`/cash/withdraw/${sellingPointId}`, data);
+export const getCashWithdrawals = () => apiClient.get('/cash/withdrawals');
+export const getSellingPointCashData = (sellingPointId) => apiClient.get(`/cash/selling-point/${sellingPointId}`);
+
 export default apiClient;

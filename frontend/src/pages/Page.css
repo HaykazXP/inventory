@@ -47,6 +47,19 @@
     flex-wrap: wrap;
 }
 
+/* Cash Card Content */
+.cash-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cash-card-content .summary-value {
+    flex: 1;
+    font-size: 1rem;
+}
+
 /* Tabs Styles */
 .tabs {
     margin-bottom: 1.5rem;
@@ -152,11 +165,34 @@
 /* Additional responsive styles for full-width layout */
 @media (max-width: 1200px) {
     .summary-cards {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: 2fr 2fr 1fr 1fr;
+        gap: 0.4rem;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .summary-cards {
+        grid-template-columns: 2fr 2fr 1fr 1fr;
+        gap: 0.3rem;
+    }
+}
+
+/* Only split into multiple rows on very small screens */
+@media (max-width: 600px) {
+    .summary-cards {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        gap: 0.5rem;
+    }
+    
     .card-header-with-action {
         flex-direction: column;
         align-items: stretch;
@@ -165,17 +201,17 @@
     .tabs-list {
         flex-wrap: wrap;
     }
-    
-    .sub-tabs-header {
-        flex-wrap: wrap;
-    }
-    
-    .products-table-container,
-    .stock-replenishments-table-container,
-    .inventory-logs-table-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+}
+
+.sub-tabs-header {
+    flex-wrap: wrap;
+}
+
+.products-table-container,
+.stock-replenishments-table-container,
+.inventory-logs-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Card Header with Action */

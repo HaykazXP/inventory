@@ -22,6 +22,7 @@ app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/sales', require('./routes/sales'));
 app.use('/api/weekly-inventory', require('./routes/weeklyInventory'));
 app.use('/api/non-cash', require('./routes/nonCash'));
+app.use('/api/cash', require('./routes/cash'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/auth', require('./routes/auth'));
 

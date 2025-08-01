@@ -6,6 +6,7 @@ import AddProductModal from '../components/AddProductModal';
 import AddStockReplenishmentModal from '../components/AddStockReplenishmentModal';
 import AddSaleModal from '../components/AddSaleModal';
 import WeeklyInventoryModal from '../components/WeeklyInventoryModal';
+import CashWithdrawalModal from '../components/CashWithdrawalModal';
 import Pagination from '../components/Pagination';
 import './Page.css';
 
@@ -26,6 +27,7 @@ const SellingPointsPage = () => {
     const [salesPage, setSalesPage] = useState(1);
     const [salesItemsPerPage, setSalesItemsPerPage] = useState(10);
     const [isWeeklyInventoryModalOpen, setIsWeeklyInventoryModalOpen] = useState(false);
+    const [isCashWithdrawalModalOpen, setIsCashWithdrawalModalOpen] = useState(false);
 
     const subTabs = [
         { id: 0, name: 'Товары' },
@@ -101,6 +103,10 @@ const SellingPointsPage = () => {
         fetchSellingPoints(); // Refresh selling points after inventory check
         fetchInventoryLogs(); // Refresh inventory logs
         fetchSalesRecords(); // Refresh sales records as well
+    };
+
+    const handleCashWithdrawalSuccess = () => {
+        fetchSellingPoints(); // Refresh selling points after cash withdrawal
     };
 
     const formatCurrency = (amount) => {
@@ -213,8 +219,18 @@ const SellingPointsPage = () => {
                     {/* Summary Cards */}
                     <div className="summary-cards">
                         <Card title="Касса">
-                            <div className="summary-value">
-                                {formatCurrency(activeSellingPoint.cash || 0)}
+                            <div className="cash-card-content">
+                                <div className="summary-value">
+                                    {formatCurrency(activeSellingPoint.cash || 0)}
+                                </div>
+                                <Button
+                                    onClick={() => setIsCashWithdrawalModalOpen(true)}
+                                    variant="primary"
+                                    size="small"
+                                    disabled={(activeSellingPoint.cash || 0) <= 0}
+                                >
+                                    Снять
+                                </Button>
                             </div>
                         </Card>
                         
@@ -583,6 +599,16 @@ const SellingPointsPage = () => {
                     sellingPointId={activeSellingPoint._id}
                     sellingPointName={activeSellingPoint.name}
                     onSuccess={handleWeeklyInventorySuccess}
+                />
+            )}
+
+            {/* Cash Withdrawal Modal */}
+            {activeSellingPoint && (
+                <CashWithdrawalModal
+                    isOpen={isCashWithdrawalModalOpen}
+                    onClose={() => setIsCashWithdrawalModalOpen(false)}
+                    sellingPoint={activeSellingPoint}
+                    onSuccess={handleCashWithdrawalSuccess}
                 />
             )}
         </div>
