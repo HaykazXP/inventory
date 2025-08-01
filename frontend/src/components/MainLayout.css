@@ -1,0 +1,10 @@
+.main-layout {
+    display: flex;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 2rem;
+    width: calc(100% - 220px);
+    box-sizing: border-box;
+}
