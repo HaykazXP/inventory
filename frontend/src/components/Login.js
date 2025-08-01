@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../services/api';
+import { login as loginAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -17,8 +17,16 @@ const Login = () => {
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            const res = await api.post('/auth/login', { login, password });
+            const res = await loginAPI({ login, password });
+            
+            // Store both tokens
             localStorage.setItem('token', res.data.token);
+            localStorage.setItem('refreshToken', res.data.refreshToken);
+            
+            // Store token expiry time
+            const expiryTime = Date.now() + res.data.expiresIn;
+            localStorage.setItem('tokenExpiry', expiryTime.toString());
+            
             navigate('/dashboard');
         } catch (err) {
             setError('Invalid credentials');

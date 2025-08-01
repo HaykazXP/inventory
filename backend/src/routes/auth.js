@@ -31,22 +31,75 @@ router.post('/login', async (req, res) => {
             }
         };
 
-        jwt.sign(
+        // Generate access token (shorter expiry)
+        const accessToken = jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }, // Token expires in 1 hour
-            (err, token) => {
-                if (err) {
-                    console.error('JWT Error:', err);
-                    throw err;
-                }
-                res.json({ token });
-            }
+            { expiresIn: '15m' } // Access token expires in 15 minutes
         );
+
+        // Generate refresh token (longer expiry)
+        const refreshToken = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' } // Refresh token expires in 7 days
+        );
+
+        res.json({ 
+            token: accessToken,
+            refreshToken: refreshToken,
+            expiresIn: 15 * 60 * 1000 // 15 minutes in milliseconds
+        });
 
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
+    }
+});
+
+// @route   POST api/auth/refresh
+// @desc    Refresh access token using refresh token
+// @access  Public
+router.post('/refresh', async (req, res) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+        return res.status(401).json({ msg: 'Refresh token required' });
+    }
+
+    try {
+        // Verify refresh token
+        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+        
+        const payload = {
+            user: {
+                id: decoded.user.id
+            }
+        };
+
+        // Generate new access token
+        const newAccessToken = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        // Generate new refresh token
+        const newRefreshToken = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.json({ 
+            token: newAccessToken,
+            refreshToken: newRefreshToken,
+            expiresIn: 15 * 60 * 1000 // 15 minutes in milliseconds
+        });
+
+    } catch (err) {
+        console.error('Refresh token error:', err.message);
+        res.status(401).json({ msg: 'Invalid refresh token' });
     }
 });
 
