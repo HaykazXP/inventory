@@ -4,11 +4,11 @@ import Card from '../components/Card';
 const DashboardPage = () => {
     return (
         <div>
-            <h1>Dashboard</h1>
-            <Card title="Welcome">
-                <p>Welcome to the Inventory Management System.</p>
-                <p>Use the sidebar to navigate to different sections of the application.</p>
-            </Card>
+            <h1>Главная</h1>
+<Card title="Добро пожаловать">
+    <p>Добро пожаловать в систему управления инвентарем.</p>
+    <p>Используйте боковую панель для навигации по разделам приложения.</p>
+</Card>
         </div>
     );
 };

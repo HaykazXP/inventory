@@ -17,16 +17,16 @@ const SellingPointsPage = () => {
 
     return (
         <div>
-            <h1>Selling Points</h1>
-            <Card title="Selling Point List">
-                <ul className="list">
-                    {sellingPoints.map((sp) => (
-                        <li key={sp._id} className="list-item">
-                            <span>{sp.name} (Checkout: {sp.checkout})</span>
-                        </li>
-                    ))}
-                </ul>
-            </Card>
+            <h1>Точки продаж</h1>
+<Card title="Список точек продаж">
+    <ul className="list">
+        {sellingPoints.map((sp) => (
+            <li key={sp._id} className="list-item">
+                <span>{sp.name} (Касса: {sp.checkout})</span>
+            </li>
+        ))}
+    </ul>
+</Card>
         </div>
     );
 };

@@ -4,7 +4,7 @@ import Login from '../components/Login';
 const LoginPage = () => {
     return (
         <div>
-            <h1>Inventory Management System</h1>
+            <h1>Система управления инвентарем</h1>
             <Login />
         </div>
     );

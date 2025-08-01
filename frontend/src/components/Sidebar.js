@@ -6,14 +6,14 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <div className="sidebar-header">
-                <h2>Inventory</h2>
-            </div>
-            <nav className="sidebar-nav">
-                <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
-                <NavLink to="/products" className="nav-link">Products</NavLink>
-                <NavLink to="/selling-points" className="nav-link">Selling Points</NavLink>
-                <NavLink to="/inventory" className="nav-link">Inventory</NavLink>
-            </nav>
+    <h2>Инвентарь</h2>
+</div>
+<nav className="sidebar-nav">
+    <NavLink to="/dashboard" className="nav-link">Главная</NavLink>
+    <NavLink to="/products" className="nav-link">Товары</NavLink>
+    <NavLink to="/selling-points" className="nav-link">Точки продаж</NavLink>
+    <NavLink to="/inventory" className="nav-link">Склад</NavLink>
+</nav>
         </div>
     );
 };

@@ -17,16 +17,16 @@ const ProductsPage = () => {
 
     return (
         <div>
-            <h1>Products</h1>
-            <Card title="Product List">
-                <ul className="list">
-                    {products.map((product) => (
-                        <li key={product._id} className="list-item">
-                            <span>{product.name} - ${product.price}</span>
-                        </li>
-                    ))}
-                </ul>
-            </Card>
+            <h1>Товары</h1>
+<Card title="Список товаров">
+    <ul className="list">
+        {products.map((product) => (
+            <li key={product._id} className="list-item">
+                <span>{product.name} - {product.price} руб.</span>
+            </li>
+        ))}
+    </ul>
+</Card>
         </div>
     );
 };

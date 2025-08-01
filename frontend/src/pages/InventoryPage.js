@@ -61,45 +61,45 @@ const InventoryPage = () => {
 
     return (
         <div>
-            <h1>Inventory</h1>
-            <Card title="Add Product to Selling Point">
-                <form onSubmit={handleAddProduct} className="form-inline">
-                    <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)} required className="form-input">
-                        <option value="">Select Product</option>
-                        {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
-                    </select>
-                    <select value={selectedSellingPoint} onChange={(e) => setSelectedSellingPoint(e.target.value)} required className="form-input">
-                        <option value="">Select Selling Point</option>
-                        {sellingPoints.map(sp => <option key={sp._id} value={sp._id}>{sp.name}</option>)}
-                    </select>
-                    <input
-    type="number"
-    value={quantity}
-    onChange={(e) => setQuantity(Number(e.target.value))}
-    className="form-input"
-/>
-                    <Button type="submit">Add</Button>
-                </form>
-            </Card>
+            <h1>Склад</h1>
+<Card title="Добавить товар на точку продаж">
+    <form onSubmit={handleAddProduct} className="form-inline">
+        <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)} required className="form-input">
+            <option value="">Выберите товар</option>
+            {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
+        </select>
+        <select value={selectedSellingPoint} onChange={(e) => setSelectedSellingPoint(e.target.value)} required className="form-input">
+            <option value="">Выберите точку продаж</option>
+            {sellingPoints.map(sp => <option key={sp._id} value={sp._id}>{sp.name}</option>)}
+        </select>
+        <input
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+            className="form-input"
+        />
+        <Button type="submit">Добавить</Button>
+    </form>
+</Card>
 
-            <Card title="Current Inventory">
-                <ul className="list">
-                    {inventory.map(item => (
-                        <li key={item._id} className="list-item">
-                            <span>{item.productId.name} at {item.sellingPointName}</span>
-                            <div>
-                                <input 
-                                    type="number" 
-                                    defaultValue={item.quantity} 
-                                    onBlur={(e) => handleUpdateCount(item._id, Number(e.target.value))}
-                                    className="form-input"
-                                />
-                                <Button onClick={() => handleRemove(item._id)} variant="danger">Remove</Button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </Card>
+<Card title="Текущий склад">
+    <ul className="list">
+        {inventory.map(item => (
+            <li key={item._id} className="list-item">
+                <span>{item.productId.name} в {item.sellingPointName}</span>
+                <div>
+                    <input 
+                        type="number" 
+                        defaultValue={item.quantity} 
+                        onBlur={(e) => handleUpdateCount(item._id, Number(e.target.value))}
+                        className="form-input"
+                    />
+                    <Button onClick={() => handleRemove(item._id)} variant="danger">Удалить</Button>
+                </div>
+            </li>
+        ))}
+    </ul>
+</Card>
         </div>
     );
 };

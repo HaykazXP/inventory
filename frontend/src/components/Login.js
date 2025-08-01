@@ -28,31 +28,31 @@ const Login = () => {
 
     return (
         <div>
-            <h2>Login</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={onSubmit}>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Login"
-                        name="login"
-                        value={login}
-                        onChange={onChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        value={password}
-                        onChange={onChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Login</button>
-            </form>
+            <h2>Вход</h2>
+{error && <p style={{ color: 'red' }}>{error}</p>}
+<form onSubmit={onSubmit}>
+    <div>
+        <input
+            type="text"
+            placeholder="Логин"
+            name="login"
+            value={login}
+            onChange={onChange}
+            required
+        />
+    </div>
+    <div>
+        <input
+            type="password"
+            placeholder="Пароль"
+            name="password"
+            value={password}
+            onChange={onChange}
+            required
+        />
+    </div>
+    <button type="submit">Войти</button>
+</form>
         </div>
     );
 };
